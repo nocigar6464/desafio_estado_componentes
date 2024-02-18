@@ -1,17 +1,11 @@
 import React from 'react';
+import Badge from 'react-bootstrap/Badge';
 
-const Alert = () => {
+const Alert = ({ message, color }) => {
     return (
-        <div>
-        {/* Aquí iría el componente de alerta para mostrar mensajes al usuario */}
-        <div className='alertEmailWrong'>¡EL formato del email es Incorrecto!</div>
-        <div className='alertCompleteAllFields'>¡Existen campos vacíos!</div>
-        <div className='alertPasswdNotSame'>¡Las contraseñas no coinciden!</div>
-        <div className='alertRedSuccess'>¡Las contraseñas no coinciden!</div>
-
-
-
-    </div>
+        <Badge bg={color} className="d-flex align-items-center justify-content-center" style={{ height: '50px', width: '100%' }}>
+            {message}
+        </Badge>
     );
 }
 

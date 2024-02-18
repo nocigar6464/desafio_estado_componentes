@@ -1,31 +1,44 @@
 import React, { useState } from 'react';
-import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-const Formulario = () => {
-    //Estados del formulario
+const Formulario = ({ setAlert }) => {
+    // State para guardar info de los campos
     const [nameForm, setNameForm] = useState('');
     const [emailForm, setEmailForm] = useState(''); 
     const [passFirst, setPassFirst] = useState('');
     const [passConfirm, setPassConfirm] = useState('');
-
-    const [error, setError] = useState(false);
-
+    // Validacion del Formulario
     const validateData = (e) => { 
         e.preventDefault();
-        //Validación
-        if (nameForm === '' || emailForm === '' || passFirst === '' || passConfirm === '') {
-            setError(true);
+        
+        if (!nameForm.trim() || !emailForm.trim() || !passFirst.trim() || !passConfirm.trim()) {
+            setAlert({ message: '¡Todos los campos son obligatorios!', color: 'warning' });
             return;
         }
-        setError(false);
+
+        if (!/\S+@\S+\.\S+/.test(emailForm)) {
+            setAlert({ message: '¡Formato de Email Incorrecto!', color: 'warning' });
+            return;
+        }
+        if (passFirst.length < 6 || passConfirm.length < 6) {
+            setAlert({ message: '¡La contraseña debe tener al menos 6 caracteres!', color: 'danger' });
+            return;
+        }
+
+        if (passFirst !== passConfirm) {
+            setAlert({ message: '¡Las contraseñas no coinciden!', color: 'danger' });
+            return;
+        }
+
+        setAlert({ message: '¡Formulario enviado exitosamente!', color: 'success' });
+
         setNameForm('');
         setEmailForm('');
         setPassFirst('');
         setPassConfirm('');
     };
-
+    // Formulario
     return (
         <div>
             <Form onSubmit={validateData}>
@@ -48,18 +61,9 @@ const Formulario = () => {
                     <Form.Group className="mb-3">
                         <Button type="submit" variant="success" style={{ width: '100%' }}>Registrarse</Button>
                     </Form.Group>
-
-                    <Form.Group className="mb-3" style={{ height: '50px' }}>
-                    {error ? (
-                    <Badge bg="warning" className="d-flex align-items-center justify-content-center" style={{ height: '100%', width: '100%' }}>
-                        Todos los campos son obligatorios
-                    </Badge>
-                    ) : null}
-                    </Form.Group>
             </Form>
         </div>
     );
 };
 
 export default Formulario;
-
